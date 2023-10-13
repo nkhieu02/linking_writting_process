@@ -1,0 +1,12 @@
+Parameters:
+- Data:
+  - features: left out down_time, up_time (#), down_event, up_event (##)
+  cursor_position (unknown ability). Inlcude action_time (represent up
+  and down time if positional information kept), activity (can mostly
+  explain the down and up event), word_count. 
+    - activity: restrict to only 6 different activities at the moment
+    - text_change: only take into account the number of text change.
+- Model
+  - Try out the RNN model.
+
+
