@@ -5,8 +5,7 @@ import math
 from torch import optim, nn
 import os
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-  
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
 def print_sample_with_rare_classes(trg, output, loss, 
                                    i, name):
     path = os.path.join('log', name)
@@ -104,7 +103,7 @@ class CosineAnnealingWarmupRestarts(_LRScheduler):
 
 
 class EarlyStopping:
-    def __init__(self, patience=3, delta=0, verbose=True, file_name = 'model.pt', dir_='checkpoints'):
+    def __init__(self, patience=3, delta=0, verbose=True, base_name = 'model', dir_='checkpoints'):
         """
         Args:
             patience (int): How long to wait after last improvement before stopping.
@@ -123,7 +122,7 @@ class EarlyStopping:
         self.best_score = None
         self.early_stop = False
         self.val_loss_min = np.Inf
-        self.path = os.path.join(dir_, file_name)
+        self.path = os.path.join(dir_, f'{base_name}.pt')
 
     def __call__(self, val_loss, model):
         score = -val_loss  # Assuming you are monitoring loss, so higher is worse.

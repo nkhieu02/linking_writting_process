@@ -53,9 +53,9 @@ MAX_LR = args.MAX_LR
 
 # Create a file name based on the attributes
 ## Create the file name to save:
-DIR = f"rnn_H{HIDDEN_DIM}_LH{LINEAR_HIDDEN_DIM}_E{EMBEDDING_SIZE}_" \
+BASE_NAME = f"rnn_H{HIDDEN_DIM}_LH{LINEAR_HIDDEN_DIM}_E{EMBEDDING_SIZE}_" \
       f"S{SPLIT}_N{NOF_DATA}_E{EPOCHS}_C{CLIP}_B{BATCH}_" \
-      f"LR{LR}_D{DELTA}_P{PATIENCE}_MinLR{MIN_LR}_MaxLR{MAX_LR}.pt"
+      f"LR{LR}_D{DELTA}_P{PATIENCE}_MinLR{MIN_LR}_MaxLR{MAX_LR}"
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -77,7 +77,7 @@ model = Grader(HIDDEN_DIM, LINEAR_HIDDEN_DIM, class_size_dict,
 training_steps = EPOCHS * len(train_dataloader)
 criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr = LR)
-early_stop = EarlyStopping(patience= PATIENCE, delta= DELTA)
+early_stop = EarlyStopping(patience= PATIENCE, delta= DELTA, file_name= BASE_NAME)
 lr_scheduler = CosineAnnealingWarmupRestarts(optimizer, training_steps, min_lr = MIN_LR, 
                                              max_lr= MAX_LR, warmup_steps= int(training_steps * 0.1))
 
@@ -85,7 +85,7 @@ for epoch in range(EPOCHS):
 
 
     train_loss = train(model, train_dataloader, val_dataloader,optimizer, criterion, CLIP,
-                       evaluate, early_stop, )
+                       evaluate, early_stop, name = BASE_NAME)
     valid_loss = evaluate(model, val_dataloader, criterion)
 
     print(f'Epoch: {epoch+1:02}')
